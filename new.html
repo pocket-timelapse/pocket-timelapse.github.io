@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>
+        Pocket Time-Lapse
+    </title>
+    <meta content="Pocket Time-Lapse" property="og:title" />
+    <style type="text/css">
+        :root {
+            --small-thumb-border-radius: 2px;
+            --larger-thumb-border-radius: 3px;
+        }
+
+        html {
+            font-size: 17px;
+            line-height: 1.6;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        @media (min-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .base-grid,
+        .n-header,
+        .n-byline,
+        .n-title,
+        .n-article,
+        .n-footer {
+            display: grid;
+            justify-items: stretch;
+            grid-template-columns: [screen-start] 8px [page-start kicker-start text-start gutter-start middle-start] 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr [text-end page-end gutter-end kicker-end middle-end] 8px [screen-end];
+            grid-column-gap: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-column-gap: 8px;
+        }
+
+        @media (min-width: 768px) {
+
+            .base-grid,
+            .n-header,
+            .n-byline,
+            .n-title,
+            .n-article,
+            .n-footer {
+                display: grid;
+                justify-items: stretch;
+                grid-template-columns: [screen-start] 1fr [page-start kicker-start middle-start text-start] 45px 45px 45px 45px 45px 45px 45px 45px [kicker-end text-end gutter-start] 45px [middle-end] 45px [page-end gutter-end] 1fr [screen-end];
+                grid-column-gap: 16px;
+            }
+
+            .grid {
+                grid-column-gap: 16px;
+            }
+        }
+
+        @media (min-width: 1000px) {
+
+            .base-grid,
+            .n-header,
+            .n-byline,
+            .n-title,
+            .n-article,
+            .n-footer {
+                display: grid;
+                justify-items: stretch;
+                grid-template-columns: [screen-start] 1fr [page-start kicker-start] 50px [middle-start] 50px [text-start kicker-end] 50px 50px 50px 50px 50px 50px 50px 50px [text-end gutter-start] 50px [middle-end] 50px [page-end gutter-end] 1fr [screen-end];
+                grid-column-gap: 16px;
+            }
+
+            .grid {
+                grid-column-gap: 16px;
+            }
+        }
+
+        @media (min-width: 1180px) {
+
+            .base-grid,
+            .n-header,
+            .n-byline,
+            .n-title,
+            .n-article,
+            .n-footer {
+                display: grid;
+                justify-items: stretch;
+                grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+                grid-column-gap: 32px;
+            }
+
+            .grid {
+                grid-column-gap: 32px;
+            }
+        }
+
+        @media (min-width: 1500px) {
+
+            .base-grid,
+            .n-header,
+            .n-byline,
+            .n-title,
+            .n-article,
+            .n-footer {
+                display: grid;
+                justify-items: stretch;
+                grid-template-columns: [screen-start] 1fr [page-start kicker-start] 70px [middle-start] 70px [text-start kicker-end] 70px 70px 70px 70px 70px 70px 70px 70px [text-end gutter-start] 70px [middle-end] 70px [page-end gutter-end] 1fr [screen-end];
+                grid-column-gap: 48px;
+            }
+
+            .grid {
+                grid-column-gap: 48px;
+            }
+        }
+
+        .base-grid {
+            grid-column: screen;
+        }
+
+        /* default grid column assignments */
+        .n-title>* {
+            grid-column: text;
+        }
+
+        .n-article>* {
+            grid-column: text;
+        }
+
+        .n-header {
+            height: 0px;
+        }
+
+        .n-footer {
+            height: 60px;
+        }
+
+        .n-title {
+            padding: 4rem 0 1.5rem;
+        }
+
+        .l-page {
+            grid-column: page;
+        }
+
+        .l-article {
+            grid-column: text;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 1em;
+        }
+
+        .pixelated {
+            image-rendering: pixelated;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        /*------------------------------------------------------------------*/
+        /* title */
+        .n-title h1 {
+            font-family: "Barlow", system-ui, Arial, sans-serif;
+            color: #000304;
+            grid-column: text;
+            font-size: 40px;
+            font-weight: 700;
+            line-height: 1.1em;
+            margin: 0 0 0.5rem;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .n-title h1 {
+                font-size: 40px;
+            }
+        }
+
+        /*------------------------------------------------------------------*/
+        /* article */
+        .n-article {
+            color: #000304;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding-top: 3rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: 3rem;
+        }
+
+        .n-article h2 {
+            contain: layout style;
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 1.25em;
+            margin: 2rem 0 1.5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .n-article {
+                line-height: 1.7;
+            }
+
+            .n-article h2 {
+                font-size: 36px;
+            }
+        }
+
+        /*------------------------------------------------------------------*/
+        /* byline */
+
+        .n-byline {
+            contain: style;
+            overflow: hidden;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            font-size: 0.8rem;
+            line-height: 1.8em;
+            padding: 1.5rem 0;
+            min-height: 1.8em;
+        }
+
+        .n-byline .byline {
+            grid-column: text;
+        }
+
+        .byline {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+
+        .grid {
+            display: grid;
+            grid-column-gap: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .grid {
+                grid-column-gap: 16px;
+            }
+        }
+
+        .n-byline p {
+            margin: 0;
+        }
+
+        .n-byline h3 {
+            font-size: 0.6rem;
+            font-weight: 400;
+            color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .n-byline .authors-affiliations {
+            grid-column-end: span 2;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        /*------------------------------------------------------------------*/
+        /* figures */
+        .figure {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        figcaption,
+        .figcaption {
+            color: rgba(0, 0, 0, 0.6);
+            font-size: 12px;
+            line-height: 1.5em;
+        }
+
+        ul.authors {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        ul.authors li {
+            padding: 0;
+            margin: 0;
+            display: inline;
+            font-size: 1rem;
+        }
+
+        /*------------------------------------------------------------------*/
+        /* footer */
+        .n-footer {
+            color: rgba(0, 0, 0, 0.4);
+            font-size: 0.8rem;
+            line-height: 1.8em;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 1.5rem 0;
+            min-height: 1.8em;
+        }
+
+        .n-footer p {
+            margin: 0;
+        }
+
+        .n-footer a {
+            color: rgba(0, 0, 0, 0.5);
+            text-decoration: none;
+        }
+
+        .n-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /*------------------------------------------------------------------*/
+        /* supplementary */
+        .l-article .hollow-circle {
+            list-style-type: circle;
+        }
+
+        .l-article .filled-circle {
+            list-style-type: disc;
+        }
+
+        .l-article .square {
+            list-style-type: square;
+        }
+
+        .l-article .numbers {
+            list-style-type: decimal;
+        }
+
+        .l-article .letters {
+            list-style-type: lower-alpha;
+        }
+
+        .l-article .letters-upper {
+            list-style-type: upper-alpha;
+        }
+
+        .l-article .roman {
+            list-style-type: lower-roman;
+        }
+
+        .l-article .roman-upper {
+            list-style-type: upper-roman;
+        }
+
+        .l-article .greek {
+            list-style-type: lower-greek;
+        }
+
+        .l-article .greek-upper {
+            list-style-type: upper-greek;
+        }
+
+        .t-al {
+            text-align: left;
+        }
+
+        .t-ac {
+            text-align: center;
+        }
+
+        .t-ar {
+            text-align: right;
+        }
+
+        /* Tables */
+        .n-article table {
+            font-size: 12px;
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin-top: 0.75em;
+            margin-bottom: 1.5em;
+        }
+
+        .n-article table thead th {
+            border-top: 2px solid #000;
+            border-bottom: 1px solid #000;
+            font-weight: bold;
+        }
+
+        .n-article table td,
+        .n-article table th {
+            padding: 0.2em 0.5em;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .n-article table th {
+            vertical-align: bottom;
+        }
+
+        .n-article table td {
+            vertical-align: top;
+        }
+
+        @media (min-width: 768px) {
+            .n-article table {
+                font-size: 16px;
+            }
+        }
+
+        table.in-text {
+            margin-top: 0.25em;
+            margin-bottom: 1em;
+        }
+
+        table.in-text td,
+        table.in-text th {
+            padding: 0.2em 0.5em;
+            border: none;
+        }
+
+        .small th,
+        .small td {
+            font-size: 12px;
+            padding: 0.2em 0.25em;
+        }
+
+        @media (min-width: 768px) {
+            .small th,
+            .small td {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body class="base-grid">
+    <header class="n-header"></header>
+    <section class="n-title">
+        <h1>Pocket Time-Lapse</h1>
+        <div class="byline authors-affiliations">
+            <p>Photography by <strong>John Doe</strong></p>
+        </div>
+    </section>
+    <section class="n-article">
+        <article class="l-article">
+            <p>In the fast-paced world of photography, time-lapse stands out as a unique art form that captivates viewers by compressing time and showcasing changes that occur gradually.</p>
+            <h2>Introduction</h2>
+            <p>Time-lapse photography is a technique in which the frequency at which film frames are captured (the frame rate) is much lower than the frequency used to view the sequence. When played at normal speed, time appears to be moving faster and thus lapsing.</p>
+            <h2>Equipment</h2>
+            <p>To get started with time-lapse photography, you need a few essential pieces of equipment:</p>
+            <ul class="filled-circle">
+                <li>Camera</li>
+                <li>Tripod</li>
+                <li>Intervalometer</li>
+                <li>Neutral Density Filters</li>
+                <li>Post-processing Software</li>
+            </ul>
+            <h2>Techniques</h2>
+            <p>There are various techniques to achieve stunning time-lapse footage:</p>
+            <ul class="numbers">
+                <li><strong>Basic Time-Lapse</strong>: Capturing images at regular intervals and compiling them into a video.</li>
+                <li><strong>Hyperlapse</strong>: Similar to time-lapse but involves moving the camera between each shot to create a sense of motion.</li>
+                <li><strong>Motion Control</strong>: Using specialized equipment to control the camera's movements during the capture process.</li>
+            </ul>
+            <h2>Challenges</h2>
+            <p>While time-lapse photography can be incredibly rewarding, it also presents several challenges:</p>
+            <ul class="square">
+                <li>Weather Conditions</li>
+                <li>Battery Life</li>
+                <li>Storage Space</li>
+                <li>Flicker</li>
+            </ul>
+            <h2>Conclusion</h2>
+            <p>Time-lapse photography is a powerful tool that allows photographers to tell stories in a way that highlights the passage of time. With the right equipment and techniques, anyone can create mesmerizing time-lapse videos.</p>
+            <figure class="figure">
+                <img src="https://via.placeholder.com/400" alt="Example Time-Lapse Image" />
+                <figcaption class="figcaption">An example of a time-lapse image capturing the beauty of a sunset.</figcaption>
+            </figure>
+        </article>
+    </section>
+    <footer class="n-footer">
+        <p>&copy; 2024 Pocket Time-Lapse. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>
