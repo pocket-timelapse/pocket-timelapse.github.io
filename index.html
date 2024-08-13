@@ -10,22 +10,26 @@
 	<meta content="Pocket Time-Lapse" property="og:title" />
 	<style type="text/css">
 		.image-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        .image-container {
-            flex: 1;
-            margin: 0 10px;
-            text-align: center;
-        }
-        .image-container img {
-            width: 100%;
-            /* max-width: px; Adjust max-width to fit your layout */
-        }
-        .videocaption {
-            text-align: center;
-        }
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 10px;
+		}
+
+		.image-container {
+			flex: 1;
+			margin: 0 10px;
+			text-align: center;
+		}
+
+		.image-container img {
+			width: 100%;
+			/* max-width: px; Adjust max-width to fit your layout */
+		}
+
+		.videocaption {
+			text-align: center;
+		}
+
 		:root {
 			--small-thumb-border-radius: 2px;
 			--larger-thumb-border-radius: 3px;
@@ -495,7 +499,7 @@
 
 		<div class="l-page videotop" style="display: flex">
 			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video aautoplay loop muted controls="" width="100%">
+				<video autoplay loop muted controls="" width="100%">
 					<source src="time_splatting/balcony1.mp4" type="video/mp4" />
 				</video>
 				<div class="videocaption">
@@ -511,7 +515,7 @@
 			<div style="width: 0.98%; margin: 0px; padding: 0px">
 			</div>
 			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video aautoplay loop muted controls="" width="100%">
+				<video autoplay loop muted controls="" width="100%">
 					<source src="time_splatting/Homegarage.mp4" type="video/mp4" />
 				</video>
 				<div class="videocaption">
@@ -644,7 +648,7 @@
 
 		<div class="l-page videobottom" style="display: flex">
 			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
+				<video loop muted controls="" width="100%">
 					<source src="time_splatting/homegarage time of day.mp4" type="video/mp4" />
 				</video>
 				<div class="videocaption">
@@ -659,7 +663,7 @@
 			<div style="width: 0.98%; margin: 0px; padding: 0px">
 			</div>
 			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
+				<video loop muted controls="" width="100%">
 					<source src="time_splatting/homegarage time of day shd.mp4" type="video/mp4" />
 				</video>
 				<div class="videocaption">
@@ -678,7 +682,7 @@
 
 		<div class="l-page videobottom" style="display: flex">
 			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
+				<video loop muted controls="" width="100%">
 					<source src="time_splatting/gates_recon.mp4" type="video/mp4" />
 				</video>
 				<div class="videocaption">
@@ -694,7 +698,7 @@
 			<div style="width: 0.98%; margin: 0px; padding: 0px">
 			</div>
 			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
+				<video loop muted controls="" width="100%">
 					<source src="time_splatting/gates_shd.mp4" type="video/mp4" />
 				</video>
 				<div class="videocaption">
@@ -749,16 +753,20 @@
 			</center>
 		</h2>
 
-		<p>In additiona to comparing our method to the Oridnal Shading image decomposition method, below we provide comparisons of with two different recent methods on the image decomposition task, demosntrating how our method outperforms them as well.</p>
-	
+		<p>In additiona to comparing our method to the Oridnal Shading image decomposition method, below we provide
+			comparisons of with two different recent methods on the image decomposition task, demosntrating how our
+			method outperforms them as well.</p>
+
 		<div class="image-row">
 			<div class="image-container">
 				<img src="figures/sunnyhoy_figure.png" alt="Image 5">
 				<div class="videocaption">
 					<strong>Image 5:</strong>
 
-					Our method is able to correctly disentangle shadows from the reflectance image, completely containing it in the shading image.
-					Li et al. and Das et al. fail to disentangle shadows, with the reflectance image containing visible shadows.
+					Our method is able to correctly disentangle shadows from the reflectance image, completely
+					containing it in the shading image.
+					Li et al. and Das et al. fail to disentangle shadows, with the reflectance image containing visible
+					shadows.
 				</div>
 			</div>
 		</div>
@@ -767,39 +775,44 @@
 				<img src="figures/balcony2_figure_new.png" alt="Image 1">
 				<div class="videocaption">
 					<strong>Image 6:</strong>
-					Our method correctly predicts the reflectaince image from a night time image, whereas Li et al. is unable to distengangle the dark from the reflectance image.
+					Our method correctly predicts the reflectaince image from a night time image, whereas Li et al. is
+					unable to distengangle the dark from the reflectance image.
 				</div>
 			</div>
 			<div class="image-container">
 				<img src="figures/balcony1_figure.png" alt="Image 2">
 				<div class="videocaption">
 					<strong>Image 7:</strong>
-					Our image is able to correctly disentangle even very hard shadows from the refelctance image, whereas Li et al. does not.
+					Our image is able to correctly disentangle even very hard shadows from the refelctance image,
+					whereas Li et al. does not.
 				</div>
 			</div>
 		</div>
-	
+
 		<div class="image-row">
 			<div class="image-container">
 				<img src="figures/gates_figure_new.png" alt="Image 3">
 				<div class="videocaption">
 					<strong>Image 8:</strong>
-					Our method is able to correctly disentangle shadows from the reflectance image, in different lighting and geometry conditions too.
+					Our method is able to correctly disentangle shadows from the reflectance image, in different
+					lighting and geometry conditions too.
 				</div>
 			</div>
 			<div class="image-container">
 				<img src="figures/homegarage_figure.png" alt="Image 4">
 				<div class="videocaption">
 					<strong>Image 9:</strong>
-					Das et al. also fails on predicting faithful reflectnace images from night photos, whereas our method is able to extract a reflectance image essentialy the same as the one extracted from a day time photo.
+					Das et al. also fails on predicting faithful reflectnace images from night photos, whereas our
+					method is able to extract a reflectance image essentialy the same as the one extracted from a day
+					time photo.
 				</div>
 			</div>
 		</div>
-	
-		
 
 
-		 <!-- <h2>
+
+
+		<!-- <h2>
 			<center>
 					Intrinsic Image Decomposition Comparisons
 			</center>
@@ -882,9 +895,9 @@
 		
 		 -->
 
-		
 
-		
+
+
 		<div style="width: 0.98%; margin: 0px; padding: 0px">
 		</div>
 	</div>
@@ -902,7 +915,7 @@
 
 		<div class="l-page videotop" style="display: flex">
 			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video aautoplay loop muted controls="" width="100%">
+				<video autoplay loop muted controls="" width="100%">
 					<source src="gauss_inter/balcony_seasons.mp4" type="video/mp4" />
 				</video>
 				<div class="videocaption">
@@ -940,7 +953,7 @@
 						<strong>
 							Video 13:
 						</strong>
-						 Interpolation chronologically through the dataset.
+						Interpolation chronologically through the dataset.
 					</div>
 				</div>
 			</div>
@@ -955,7 +968,8 @@
 						<strong>
 							Video 14:
 						</strong>
-Melting snow.					</div>
+						Melting snow.
+					</div>
 				</div>
 			</div>
 		</div>
@@ -965,7 +979,7 @@ Melting snow.					</div>
 
 		<div class="l-page videotop" style="display: flex">
 			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
+				<video loop muted controls="" width="100%">
 					<source src="time_splatting/waterfall_inter.mp4" type="video/mp4" />
 					<!-- <source src="gauss_inter/waterfall.mp4" type="video/mp4"/> -->
 				</video>
@@ -981,7 +995,7 @@ Melting snow.					</div>
 			<div style="width: 0.98%; margin: 0px; padding: 0px">
 			</div>
 			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
+				<video loop muted controls="" width="100%">
 					<source src="time_splatting/gates.mp4" type="video/mp4" />
 					<!-- <source src="gauss_inter/gates.mp4" type="video/mp4"/> -->
 				</video>
@@ -997,7 +1011,7 @@ Melting snow.					</div>
 			<div style="width: 0.98%; margin: 0px; padding: 0px">
 			</div>
 			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
+				<video loop muted controls="" width="100%">
 					<source src="gauss_inter/balcony1_shadows_cropped.mp4" type="video/mp4" />
 				</video>
 				<div class="videocaption">
@@ -1012,7 +1026,7 @@ Melting snow.					</div>
 			<div style="width: 0.98%; margin: 0px; padding: 0px">
 			</div>
 			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
+				<video loop muted controls="" width="100%">
 					<source src="gauss_inter/sunnyhoy_shadow.mp4" type="video/mp4" />
 				</video>
 				<div class="videocaption">
@@ -1031,7 +1045,7 @@ Melting snow.					</div>
 
 		<div class="l-page videobottom" style="display: flex">
 			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
+				<video loop muted controls="" width="100%">
 					<source src="gauss_inter/hoyfield.mp4" type="video/mp4" />
 					<!-- <source src="gauss_inter/hoyfield_pano.mp4" type="video/mp4"/> -->
 				</video>
@@ -1047,8 +1061,9 @@ Melting snow.					</div>
 			<div style="width: 0.98%; margin: 0px; padding: 0px">
 			</div>
 			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
-					<source src="gauss_inter/construction_dt.mp4" type="video/mp4" />  <!-- seems better than the pano version -->
+				<video loop muted controls="" width="100%">
+					<source src="gauss_inter/construction_dt.mp4" type="video/mp4" />
+					<!-- seems better than the pano version -->
 					<!-- <source src="gauss_inter/construction_pano.mp4" type="video/mp4"/> -->
 				</video>
 				<div class="videocaption">
@@ -1063,7 +1078,7 @@ Melting snow.					</div>
 			<div style="width: 0.98%; margin: 0px; padding: 0px">
 			</div>
 			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
+				<video loop muted controls="" width="100%">
 					<source src="gauss_inter/petals.mp4" type="video/mp4" />
 				</video>
 				<div class="videocaption">
@@ -1078,7 +1093,7 @@ Melting snow.					</div>
 			<div style="width: 0.98%; margin: 0px; padding: 0px">
 			</div>
 			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
+				<video loop muted controls="" width="100%">
 					<source src="gauss_inter/construction_gates_new.mp4" type="video/mp4" />
 				</video>
 				<div class="videocaption">
@@ -1093,7 +1108,7 @@ Melting snow.					</div>
 			</div>
 		</div>
 
-		
+
 
 
 		<h2>
