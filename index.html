@@ -475,8 +475,7 @@
 			<li><strong>Time Splatting results on Pocket Time-lapse datasets</strong>
 			<li><strong>Linear interpolation on Pocket Time-lapse datasets</strong></li>
 			<li><strong>Time Splatting and interpolation results on a traditional timelapse</strong></li>
-			<li><strong>Intrinsic image decomposition comparisons</strong></li>
-			<li> <strong>Panorama stitching results</strong></l>
+			<li> <strong>Registration comparisons</strong></l>
 		</ul>
 		</p>
 	</div>
@@ -992,89 +991,33 @@
 		</div>
 	</div>
 
+
 	<div class="n-article">
 		<h2>
 			<center>
-				Intrinsic Image Decomposition Comparisons
-			</center>
-		</h2>
-
-		<p>In addition to comparing Time Splatting to the Ordinal Shading image decomposition method, below we provide
-			comparisons of with two different recent methods on the image decomposition task, demonstrating how our
-			method outperforms them as well.</p>
-
-		<div class="image-row">
-			<div class="image-container">
-				<img src="figures/sunnyhoy_figure.png" alt="Image 1" width="75%"">
-				<div class=" videocaption">
-				<strong>Image 1:</strong>
-				Our method is able to correctly disentangle shadows from the reflectance image, completely
-				containing it in the shading image.
-				Li et al. and Das et al. fail to disentangle shadows, with the reflectance image containing visible
-				shadows.
-			</div>
-		</div>
-	</div>
-	<div class="image-row">
-		<div class="image-container">
-			<img src="figures/balcony2_figure_new.png" alt="Image 2">
-			<div class="videocaption">
-				<strong>Image 2:</strong>
-				Our method correctly predicts the reflectaince image from a night time image, whereas Li et al. is
-				unable to distengangle the dark from the reflectance image.
-			</div>
-		</div>
-		<div class="image-container">
-			<img src="figures/balcony1_figure.png" alt="Image 3">
-			<div class="videocaption">
-				<strong>Image 3:</strong>
-				Our image is able to correctly disentangle even very hard shadows from the refelctance image,
-				whereas Li et al. does not.
-			</div>
-		</div>
-	</div>
-
-	<div class="image-row">
-		<div class="image-container">
-			<img src="figures/gates_figure_new.png" alt="Image 4">
-			<div class="videocaption">
-				<strong>Image 4:</strong>
-				Our method is able to correctly disentangle shadows from the reflectance image, in different
-				lighting and geometry conditions too.
-			</div>
-		</div>
-		<div class="image-container">
-			<img src="figures/homegarage_figure.png" alt="Image 5">
-			<div class="videocaption">
-				<strong>Image 5:</strong>
-				Das et al. also fails on predicting faithful reflectnace images from night photos, whereas our
-				method is able to extract a reflectance image essentialy the same as the one extracted from a day
-				time photo.
-			</div>
-		</div>
-	</div>
-
-	</div>
-	<div class="n-article">
-		<h2>
-			<center>
-				Panorama Stitching and Registration Comparison
+				Registration Comparison
 			</center>
 		</h2 <div class="l-article video">
 
 		<div>
-			<img style="width:100%" src="Screenshot 2024-01-24 at 12.35.04.png" />
+			<video loop muted controls="" width="100%">
+				<source src="registration/RegistrationComparisonHoyConstructionRoof_compressed.mp4" type="video/mp4" />
+			</video>
 		</div>
 
 		</img>
 		<div class="videocaption">
 			<div>
 				<strong>
-					Image 6:
+					Video 25:
 				</strong>
-				Our new alignment graph based panorama stitching method performs significantly better than previous
-				methods under challenging conditions. Contrary to Hugin,
-				our method correctly registers the correspondences between the images
+				We perform an ablation study between our graph-based matching strategy and two baselines. All-to-one
+				registration matches all captured images to one central image, and sequential registration registers
+				each image to its immediate neighbors in time. All-to-one registration fails, due to its inability
+				to account for dramatic changes in geometry during the captured construction. Sequential registration
+				exhibits drift in registration accuracy, which wrongly causes the scene to be rotated 90 degrees. Our
+				method on the other hand is able to register more captures successfully, with only two sessions
+				returning no registration.
 			</div>
 		</div>
 	</div>
