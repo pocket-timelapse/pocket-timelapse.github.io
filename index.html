@@ -1,1067 +1,549 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="" xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
-	<meta charset="utf-8" />
-	<meta content="width=device-width, initial-scale=1" name="viewport" />
-	<title>
-		Pocket Time-Lapse
-	</title>
-	<meta content="Pocket Time-Lapse" property="og:title" />
-	<style type="text/css">
-		.image-row {
-			display: flex;
-			justify-content: space-between;
-			margin-bottom: 10px;
-		}
+    <meta charset="utf-8">
+    <meta name="description" content="Time Splatting for reconstructing scenes across time, seasons, and conditions.">
+    <meta name="keywords" content="Time Splatting, Gaussian Splatting, NeRF, Time-Lapse, Reconstruction">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pocket-Timelapse</title>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-PYVRSFMDRL'); // Replace with your analytics ID if you have one
+    </script>
+
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+    <link rel="icon" href="./static/images/favicon.png">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script src="./static/js/bulma-carousel.min.js"></script>
+    <script src="./static/js/bulma-slider.min.js"></script>
+    <script src="./static/js/index.js"></script>
+
+    <style>
+        .videocaption {
+            margin-top: 8px;
+            font-size: 0.9rem;
+            color: #363636;
+            /* Bulma's default text color */
+        }
+
+        .videobottom {
+            margin-top: 1.5rem;
+            /* Add space between rows of videos */
+        }
+
+        .hero.teaser video {
+            /* Ensure teaser video takes full width */
+            width: 100%;
+        }
+    </style>
 
-		.image-container {
-			flex: 1;
-			margin: 0 10px;
-			text-align: center;
-		}
-
-		.image-container img {
-			width: 100%;
-			/* max-width: px; Adjust max-width to fit your layout */
-		}
-
-		.videocaption {
-			text-align: center;
-		}
-
-		:root {
-			--small-thumb-border-radius: 2px;
-			--larger-thumb-border-radius: 3px;
-		}
-
-		html {
-			font-size: 17px;
-			line-height: 1.6;
-			font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-			text-size-adjust: 100%;
-			-ms-text-size-adjust: 100%;
-			-webkit-text-size-adjust: 100%;
-		}
-
-		@media(min-width: 768px) {
-			html {
-				font-size: 16px;
-			}
-		}
-
-		body {
-			margin: 0px;
-			padding: 0px;
-		}
-
-		.base-grid,
-		.n-header,
-		.n-byline,
-		.n-title,
-		.n-article,
-		.n-footer {
-			display: grid;
-			justify-items: stretch;
-			grid-template-columns: [screen-start] 8px [page-start kicker-start text-start gutter-start middle-start] 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr [text-end page-end gutter-end kicker-end middle-end] 8px [screen-end];
-			grid-column-gap: 8px;
-		}
-
-		.grid {
-			display: grid;
-			grid-column-gap: 8px;
-		}
-
-		@media(min-width: 768px) {
-
-			.base-grid,
-			.n-header,
-			.n-byline,
-			.n-title,
-			.n-article,
-			.n-footer {
-				display: grid;
-				justify-items: stretch;
-				grid-template-columns: [screen-start] 1fr [page-start kicker-start middle-start text-start] 45px 45px 45px 45px 45px 45px 45px 45px [ kicker-end text-end gutter-start] 45px [middle-end] 45px [page-end gutter-end] 1fr [screen-end];
-				grid-column-gap: 16px;
-			}
-
-			.grid {
-				grid-column-gap: 16px;
-			}
-		}
-
-		@media(min-width: 1000px) {
-
-			.base-grid,
-			.n-header,
-			.n-byline,
-			.n-title,
-			.n-article,
-			.n-footer {
-				display: grid;
-				justify-items: stretch;
-				grid-template-columns: [screen-start] 1fr [page-start kicker-start] 50px [middle-start] 50px [text-start kicker-end] 50px 50px 50px 50px 50px 50px 50px 50px [text-end gutter-start] 50px [middle-end] 50px [page-end gutter-end] 1fr [screen-end];
-				grid-column-gap: 16px;
-			}
-
-			.grid {
-				grid-column-gap: 16px;
-			}
-		}
-
-		@media (min-width: 1180px) {
-
-			.base-grid,
-			.n-header,
-			.n-byline,
-			.n-title,
-			.n-article,
-			.n-footer {
-				display: grid;
-				justify-items: stretch;
-				grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
-				grid-column-gap: 32px;
-			}
-
-			.grid {
-				grid-column-gap: 32px;
-			}
-		}
-
-		@media (min-width: 1500px) {
-
-			.base-grid,
-			.n-header,
-			.n-byline,
-			.n-title,
-			.n-article,
-			.n-footer {
-				display: grid;
-				justify-items: stretch;
-				grid-template-columns: [screen-start] 1fr [page-start kicker-start] 70px [middle-start] 70px [text-start kicker-end] 70px 70px 70px 70px 70px 70px 70px 70px [text-end gutter-start] 70px [middle-end] 70px [page-end gutter-end] 1fr [screen-end];
-				grid-column-gap: 48px;
-			}
-
-			.grid {
-				grid-column-gap: 48px;
-			}
-		}
-
-		.base-grid {
-			grid-column: screen;
-		}
-
-		/* default grid column assignments */
-		.n-title>* {
-			grid-column: text;
-		}
-
-		.n-article>* {
-			grid-column: text;
-		}
-
-		.n-header {
-			height: 0px;
-		}
-
-		.n-footer {
-			height: 60px;
-		}
-
-		.n-title {
-			padding: 4rem 0 1.5rem;
-		}
-
-		.l-page {
-			grid-column: page;
-		}
-
-		.l-article {
-			grid-column: text;
-		}
-
-		p {
-			margin-top: 0;
-			margin-bottom: 1em;
-		}
-
-		.pixelated {
-			image-rendering: pixelated;
-		}
-
-		strong {
-			font-weight: 600;
-		}
-
-		/*------------------------------------------------------------------*/
-		/* title */
-		.n-title h1 {
-			font-family: "Barlow", system-ui, Arial, sans-serif;
-			color: #000304;
-			grid-column: text;
-			font-size: 40px;
-			font-weight: 700;
-			line-height: 1.1em;
-			margin: 0 0 0.5rem;
-			text-align: center;
-		}
-
-		@media (min-width: 768px) {
-			.n-title h1 {
-				font-size: 40px;
-			}
-		}
-
-		/*------------------------------------------------------------------*/
-		/* article */
-		.n-article {
-			color: #000304;
-			border-top: 1px solid rgba(0, 0, 0, 0.1);
-			padding-top: 3rem;
-			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-			padding-bottom: 3rem;
-		}
-
-		.n-article h2 {
-			contain: layout style;
-			font-weight: 600;
-			font-size: 24px;
-			line-height: 1.25em;
-			margin: 2rem 0 1.5rem 0;
-			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-			padding-bottom: 1rem;
-		}
-
-		@media (min-width: 768px) {
-			.n-article {
-				line-height: 1.7;
-			}
-
-			.n-article h2 {
-				font-size: 36px;
-			}
-		}
-
-		/*------------------------------------------------------------------*/
-		/* byline */
-
-		.n-byline {
-			contain: style;
-			overflow: hidden;
-			border-top: 1px solid rgba(0, 0, 0, 0.1);
-			font-size: 0.8rem;
-			line-height: 1.8em;
-			padding: 1.5rem 0;
-			min-height: 1.8em;
-		}
-
-		.n-byline .byline {
-			grid-column: text;
-		}
-
-		.byline {
-			grid-template-columns: 1fr 1fr 1fr 1fr;
-		}
-
-		.grid {
-			display: grid;
-			grid-column-gap: 8px;
-		}
-
-		@media (min-width: 768px) {
-			.grid {
-				grid-column-gap: 16px;
-			}
-		}
-
-		.n-byline p {
-			margin: 0;
-		}
-
-		.n-byline h3 {
-			font-size: 0.6rem;
-			font-weight: 400;
-			color: rgba(0, 0, 0, 0.5);
-			margin: 0;
-			text-transform: uppercase;
-		}
-
-		.n-byline .authors-affiliations {
-			grid-column-end: span 2;
-			grid-template-columns: 1fr 1fr;
-		}
-
-		/*------------------------------------------------------------------*/
-		/* figures */
-		.figure {
-			margin-top: 1.5rem;
-			margin-bottom: 1rem;
-		}
-
-		figcaption,
-		.figcaption {
-			color: rgba(0, 0, 0, 0.6);
-			font-size: 12px;
-			line-height: 1.5em;
-		}
-
-		ul.authors {
-			list-style-type: none;
-			padding: 0;
-			margin: 0;
-			text-align: center;
-		}
-
-		ul.authors li {
-			padding: 0 0.5rem;
-			display: inline-block;
-		}
-
-		ul.authors sup {
-			color: rgb(126, 126, 126);
-		}
-
-		ul.authors.affiliations {
-			margin-top: 0.5rem;
-		}
-
-		ul.authors.affiliations li {
-			color: rgb(126, 126, 126);
-		}
-
-		img.dropshadow {
-			box-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
-		}
-
-		/* video caption */
-
-		.video {
-			margin-top: 1.5rem;
-			margin-bottom: 1.5rem;
-		}
-
-		.videotop {
-			margin-top: 1.5rem;
-		}
-
-		.videobottom {
-			margin-bottom: 1.5rem;
-		}
-
-		.videocaption {
-			display: flex;
-			font-size: 16px;
-			line-height: 1.5em;
-			margin-bottom: 1rem;
-			justify-content: center;
-		}
-
-		.disable-selection {
-			user-select: none;
-			-moz-user-select: none;
-			/* Firefox */
-			-ms-user-select: none;
-			/* Internet Explorer */
-			-khtml-user-select: none;
-			/* KHTML browsers (e.g. Konqueror) */
-			-webkit-user-select: none;
-			/* Chrome, Safari, and Opera */
-			-webkit-touch-callout: none;
-			/* Disable Android and iOS callouts*/
-		}
-
-		.hidden {
-			display: none;
-		}
-
-		h3.figtitle {
-			margin-top: 0;
-			margin-bottom: 0;
-		}
-
-		.fig-title-line {
-			grid-template-columns: 2fr 0.75fr;
-		}
-
-		.fig-thumb-image-row {
-			grid-template-columns: 1fr 1fr;
-			grid-template-rows: 1fr;
-		}
-
-		.fig-thumb-image-row-item {
-			width: 100%;
-			min-height: auto;
-			border-radius: var(--small-thumb-border-radius);
-		}
-
-		.fig-dataset-button {
-			border-color: rgba(0, 0, 0, 0);
-			border-width: 1px;
-			border-style: solid;
-			cursor: pointer;
-			opacity: 0.6;
-		}
-
-		.fig-dataset-button.active {
-			border-color: rgba(0, 0, 0, 0.7);
-			border-width: 1px;
-			border-style: solid;
-			opacity: 1.0;
-		}
-
-		.grid {
-			display: grid;
-			grid-column-gap: 8px;
-		}
-
-		.fig-3-image-row {
-			margin-top: 1em;
-			grid-template-columns: 1fr 1.3fr 1fr;
-			grid-template-rows: 1fr;
-		}
-
-		.fig-3-image-item {
-			justify-self: center;
-			align-self: center;
-			width: 100%;
-			border-radius: var(--larger-thumb-border-radius);
-		}
-
-		/*---------------------------------------------------------------------*/
-		.fig-slider {
-			grid-template-columns: auto 2fr;
-			grid-template-rows: 1fr;
-			margin-top: 1em;
-			align-items: start;
-			justify-content: center;
-		}
-
-		.fig-slider img.play_button {
-			margin-right: 8px;
-			cursor: pointer;
-			justify-self: center;
-		}
-
-		.fig-slider svg {
-			touch-action: none;
-		}
-
-		.fig-preload {
-			display: none;
-		}
-
-		/*---------------------------------------------------------------------*/
-	</style>
-	<!-- inline stylesheet files into the above <style> element -->
-	<link href="https://fonts.googleapis.com/css?family=Montserrat|Segoe+UI" rel="stylesheet" />
 </head>
 
 <body>
-	<div class="n-header">
-	</div>
-	<div class="n-title">
-		<h1>
-			Pocket Time-Lapse
-		</h1>
-		<h2 id="videos">
-			<center>
-				Supplemental Videos
-			</center>
-		</h2>
-		<p>This gallery shows some of the results generated by the Pocket Time-Lapse system.
-			Contents of the page are as follows:
-		<ul>
-			<li><strong>Time Splatting results on Pocket Time-lapse datasets</strong>
-			<li><strong>Linear interpolation on Pocket Time-lapse datasets</strong></li>
-			<li><strong>Time Splatting and interpolation results on a traditional timelapse</strong></li>
-			<li> <strong>Registration comparisons</strong></l>
-		</ul>
-		</p>
-	</div>
+
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+                <a class="navbar-item" href="#"> <span class="icon">
+                        <i class="fas fa-home"></i>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <h1 class="title is-1 publication-title">Pocket Timelapse</h1>
+                        <div class="is-size-5 publication-authors">
+                            <span class="author-block">
+                                <a href="https://echen01.github.io/">Eric M. Chen</a><sup>1</sup>,</span>
+                            <span class="author-block">
+                                <a href="https://zzigak.github.io/">Žiga Kovačič</a><sup>1</sup>,</span>
+                            <span class="author-block">
+                                <a href="https://madhavaggar.github.io/">Madhav Aggarwal</a><sup>1</sup>,
+                            </span>
+                            <span class="author-block">
+                                <a href="https://abedavis.com/">Abe Davis</a><sup>1</sup>
+                            </span>
+                        </div>
+
+                        <div class="is-size-5 publication-authors">
+                            <!-- <span class="author-block"><sup>1</sup>MIT,</span> -->
+                            <span class="author-block"><sup>1</sup>Cornell University</span>
+                        </div>
+
+                        <div class="column has-text-centered">
+                            <div class="publication-links">
+                                <span class="link-block">
+                                    <a href="#" class="external-link button is-normal is-rounded is-dark"> <span
+                                            class="icon"><i class="fas fa-file-pdf"></i></span>
+                                        <span>Paper</span>
+                                    </a>
+                                </span>
+                                <span class="link-block">
+                                    <a href="#" class="external-link button is-normal is-rounded is-dark"> <span
+                                            class="icon"><i class="ai ai-arxiv"></i></span>
+                                        <span>arXiv</span>
+                                    </a>
+                                </span>
+                                <span class="link-block">
+                                    <a href="#" class="external-link button is-normal is-rounded is-dark"> <span
+                                            class="icon"><i class="fab fa-youtube"></i></span>
+                                        <span>Video</span>
+                                    </a>
+                                </span>
+                                <span class="link-block">
+                                    <a href="#" class="external-link button is-normal is-rounded is-dark"> <span
+                                            class="icon"><i class="fab fa-github"></i></span>
+                                        <span>Code</span>
+                                    </a>
+                                </span>
+                                <span class="link-block">
+                                    <a href="#" class="external-link button is-normal is-rounded is-dark"> <span
+                                            class="icon"><i class="far fa-images"></i></span>
+                                        <span>Data</span>
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="hero teaser">
+        <div class="container is-max-desktop">
+            <div class="hero-body">
+                <video id="teaser" autoplay muted loop playsinline width="100%">
+                    <source src="time_splatting/balcony1.mp4" type="video/mp4">
+                </video>
+                <h2 class="subtitle has-text-centered">
+                    Reconstructing scenes across time, seasons, and conditions using <strong>Time Splatting</strong>.
+                </h2>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-3">Abstract</h2>
+                    <div class="content has-text-justified">
+                        <p>
+                            This project explores how to record, explore, and visualize long-term changes
+                            in an environment—at the scale of days, months, and even years—based on
+                            data that a single user can conveniently capture using the mobile phone they
+                            already carry. Our strategy involves making the data capture process as quick
+                            and convenient as possible so that it is easy to integrate into daily routines.
+                            This strategy yields large unstructured panoramic image datasets, which we
+                            process using novel registration and scene reconstruction approaches.
+                            Our central contribution lies in demonstrating pocket time-lapse as a
+                            novel application, made possible through several key technical contributions.
+                            These include a novel method for quickly and robustly registering thousands
+                            of unstructured panoramic images, a novel reconstruction technique for
+                            rendering time-lapse and performing state-of-the-art intrinsic image decom-
+                            position, and several large hand-captured datasets that span multiple years
+                            of data collection, totaling over 6k separate capture sessions and 50k images
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <h2 class="title is-3 has-text-centered">Time Splatting Results: Interpolation Across Seasons</h2>
+
+            <div class="columns is-centered videotop">
+                <div class="column is-half">
+                    <video autoplay loop muted controls width="100%">
+                        <source src="time_splatting/balcony1.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 1:</strong> Time Splatting through seasons on the Balcony 1 dataset successfully
+                        disentangles seasons and progress of construction from time of day.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video autoplay loop muted controls width="100%">
+                        <source src="time_splatting/hoy_jan2025.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 2:</strong> Time Splatting of a scene with construction.
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns is-centered videobottom">
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="time_splatting/commute4.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 3:</strong> Time Splatting shows changes in leaves throughout the seasons.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="time_splatting/commute3.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 4:</strong> Another example of changing leaves through the seasons.
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns is-centered videobottom">
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="time_splatting/balcony2.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 5:</strong> Time Splatting through seasons on the Balcony 2 dataset successfully
+                        disentangles season from time of day.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="time_splatting/construction1.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 6:</strong> Another example of construction progress reconstructed with Time
+                        Splatting.
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns is-centered videobottom">
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="time_splatting/waterfall.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 7:</strong> Time Splatting is able to reconstruct water and heavy foliage as well.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="time_splatting/cdtrail.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 8:</strong> Time Splatting is able to reconstruct water and heavy foliage as well.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <h2 class="title is-3 has-text-centered">Time of Day Interpolation</h2>
+            <h3 class="subtitle is-5 has-text-centered">Reconstructions (Left) and Shading Images (Right)</h3>
+
+            <div class="columns is-centered videobottom">
+                <div class="column is-half">
+                    <video autoplay loop muted controls width="100%">
+                        <source src="time_splatting/sunnyhoy_interpolation.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 9a:</strong> Timelapse of the baseball field dataset from sunrise to sunset over
+                        one day.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video autoplay loop muted controls width="100%">
+                        <source src="time_splatting/sunnyhoy_shading.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 9b:</strong> Shading component of the timelapse of the baseball field dataset from
+                        sunrise to sunset over one day.
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns is-centered videobottom">
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="time_splatting/homegarage time of day.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 10a:</strong> Timelapse of the home garage dataset from sunrise to sunset over one
+                        day.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="time_splatting/homegarage time of day shd.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 10b:</strong> The shading component of the timelapse of the home garage dataset
+                        from sunrise to sunset over one day.
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns is-centered videobottom">
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="time_splatting/gates_recon.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 11a:</strong> Timelapse of the glass building dataset from sunrise to sunset over
+                        one day.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="time_splatting/gates_shd.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 11b:</strong> The shading component of the timelapse of the glass building dataset
+                        from sunrise to sunset over one day.
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns is-centered videobottom">
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="time_splatting/time_splatting_balcony1.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 12a:</strong> Timelapse of the Balcony 1 dataset from sunrise to sunset over one
+                        day.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="time_splatting/interpolation_balconyshadows_balcony1_shading.mp4"
+                            type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 12b:</strong> Shading component of the timelapse of the Balcony 1 dataset from
+                        sunrise to sunset over one day.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <h2 class="title is-3 has-text-centered">Linear Interpolation Results</h2>
+            <div class="content has-text-centered">
+                <p>Here we present results of linear interpolation on various datasets.</p>
+            </div>
+
+            <div class="columns is-centered videotop is-multiline">
+                <div class="column is-half"> <video autoplay loop muted controls width="100%">
+                        <source src="gauss_inter/balcony_seasons.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 13:</strong> Interpolation through seasons.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video autoplay loop muted controls width="100%">
+                        <source src="gauss_inter/balcony2.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 14:</strong> Interpolation through seasons.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video autoplay loop muted controls width="100%">
+                        <source src="gauss_inter/homegarage.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 15:</strong> Interpolation through construction.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video autoplay loop muted controls width="100%">
+                        <source src="gauss_inter/balcony1_melting.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 16:</strong> Melting snow.
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns is-centered videobottom is-multiline">
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="time_splatting/waterfall_inter.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 17:</strong> Interpolation through seasons.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="time_splatting/gates.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 18:</strong> Interpolation through seasons.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="gauss_inter/balcony1_shadows_cropped.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 19:</strong> Mini-timelapse: Interpolation through time of day while keeping the
+                        date fixed.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="gauss_inter/sunnyhoy_shadow.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 20:</strong> Interpolation through time of day.
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns is-centered videobottom is-multiline">
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="gauss_inter/hoyfield.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 21:</strong> Interpolation through seasons.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="gauss_inter/construction_dt.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 22:</strong> Interpolation through construction.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="gauss_inter/petals.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 23:</strong> Interpolation as tree petals bloom.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="gauss_inter/construction_gates_new.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 24:</strong> Interpolation through construction.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <h2 class="title is-3 has-text-centered">Time Splatting and Linear Interpolation on a Traditional Time-Lapse
+            </h2>
+            <div class="content">
+                <p>
+                    We compare Time Splatting and linear interpolation results on a traditional time-lapse. The sequence
+                    is
+                    taken from scene 10917 of the SkyFinder dataset [Mihail et al., 2016].
+                </p>
+                <p>
+                    Because the traditional time lapse is sampled densely from a static camera, linear interpolation
+                    does a good
+                    job at reconstructing detail. However, unlike Time Splatting, it cannot disentangle lighting changes
+                    from
+                    seasonal changes. We demonstrate how Time Splatting is able to generate a sequence through seasons
+                    while
+                    maintaining constant lighting below.
+                </p>
+            </div>
+
+            <div class="columns is-centered videobottom">
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="time_splatting/time_splatting_town.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 25:</strong> Time Splatting of a traditional time lapse with constant lighting.
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <video loop muted controls width="100%">
+                        <source src="gauss_inter/town_interpolation_1.mp4" type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 26:</strong> Linear interpolation of a traditional time lapse cannot disentangle
+                        lighting from seasonal changes.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <h2 class="title is-3 has-text-centered">Registration Comparison</h2>
+
+            <div class="columns is-centered">
+                <div class="column is-two-thirds"> <video loop muted controls width="100%">
+                        <source src="registration/RegistrationComparisonHoyConstructionRoof_compressed.mp4"
+                            type="video/mp4" />
+                    </video>
+                    <div class="content videocaption">
+                        <strong>Video 27:</strong> We perform a comparison between our alignment graph registration
+                        strategy and two baselines. All-to-one registration matches all captured sessions to one central
+                        node, and sequential registration registers each session to its immediate neighbors in time.
+                        All-to-one registration fails, due to its inability to account for dramatic changes in geometry
+                        during the captured construction. Sequential registration exhibits drift in registration
+                        accuracy, which wrongly causes the scene to be rotated 90 degrees. Our method on the other hand
+                        is able to register more captures successfully, with only two sessions returning no
+                        registration.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
 
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered">
+                <p>This template was inspired by the authors of <a href="https://github.com/google/nerfies">Nerfies</a>
+                    / TLGAN.</p>
+            </div>
+        </div>
+    </footer>
 
-	<div class="n-article">
-
-		<h2>
-			<center>
-				Time Splatting Results: Interpolation Across Seasons
-			</center>
-		</h2>
-
-
-		<div class="l-page videotop" style="display: flex">
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
-					<source src="time_splatting/balcony1.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 1:
-						</strong>
-						Time Splatting through seasons on the Balcony 1 dataset successfully
-						disentangles seasons and progress of construction from time of day.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
-					<source src="time_splatting/hoy_jan2025.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 2:
-						</strong>
-						Time Splatting of a scene with construction.
-
-
-					</div>
-				</div>
-			</div>
-
-		</div>
-
-		<div class="l-page videobottom" style="display: flex">
-
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="time_splatting/commute4.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 3:
-						</strong>
-						Time Splatting shows changes in leaves throughout the seasons
-					</div>
-
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="time_splatting/commute3.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 4:
-						</strong>
-						Another example of changing leaves through the seasons.
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="l-page videobottom" style="display: flex">
-
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="time_splatting/balcony2.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 5:
-						</strong>
-						Time Splatting through seasons on the Balcony 2 dataset successfully
-						disentangles season from time of day.
-					</div>
-
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="time_splatting/construction1.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 6:
-						</strong>
-						Another example of construction progress reconstructed with Time Splatting.
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="l-page videobottom" style="display: flex">
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="time_splatting/waterfall.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 7:
-						</strong>
-						Time Splatting is able to reconstruct water and heavy foliage as well.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="time_splatting/cdtrail.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 8:
-						</strong>
-						Time Splatting is able to reconstruct water and heavy foliage as well.
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<h2>
-			<center>
-				Time of Day Interpolation
-			</center>
-		</h2>
-		<h3>
-			<center>Reconstructions (Left) and Shading Images (Right)</center>
-		</h3>
-
-
-
-		<div class="l-page videobottom" style="display: flex">
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
-					<!-- <source src="sunnyhoy_interpolation_tlsplat.mp4" type="video/mp4"/> -->
-					<source src="time_splatting/sunnyhoy_interpolation.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 9a:
-						</strong>
-						Timelapse of the baseball field dataset from sunrise to sunset over one day.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
-					<source src="time_splatting/sunnyhoy_shading.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 9b:
-						</strong>
-						Shading component of the timelapse of the baseball field dataset from sunrise to sunset over one
-						day.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-		</div>
-
-		<div class="l-page videobottom" style="display: flex">
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="time_splatting/homegarage time of day.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 10a:
-						</strong>
-						Timelapse of the home garage dataset from sunrise to sunset over one day.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="time_splatting/homegarage time of day shd.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 10b:
-						</strong>
-						The shading component of the timelapse of the home garage dataset from sunrise to sunset over
-						one
-						day.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-		</div>
-
-		<div class="l-page videobottom" style="display: flex">
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="time_splatting/gates_recon.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 11a:
-						</strong>
-						Timelapse of the glass building dataset from sunrise to sunset over one day.
-					</div>
-
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="time_splatting/gates_shd.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-
-						<strong>
-							Video 11b:
-						</strong>
-						The shading component of the timelapse of the glass building dataset from sunrise to sunset over
-						one
-						day.
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="l-page videobottom" style="display: flex">
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="time_splatting/time_splatting_balcony1.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 12a:
-						</strong>
-						Timelapse of the Balcony 1 dataset from sunrise to sunset over one day.
-					</div>
-
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="time_splatting/interpolation_balconyshadows_balcony1_shading.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-
-						<strong>
-							Video 12b:
-						</strong>
-						Shading component of the timelapse of the Balcony 1 dataset from sunrise to sunset over one day.
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="n-article">
-		<h2>
-			<center>
-				Linear Interpolation Results
-			</center>
-		</h2>
-
-		<p>Here we present results of linear interpolation on various datasets.</p>
-
-		<div class="l-page videotop" style="display: flex">
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
-					<source src="gauss_inter/balcony_seasons.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 13:
-						</strong>
-						Interpolation through seasons.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
-					<source src="gauss_inter/balcony2.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 14:
-						</strong>
-						Interpolation through seasons.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
-					<source src="gauss_inter/homegarage.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 15:
-						</strong>
-						Interpolation through construction.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video autoplay loop muted controls="" width="100%">
-					<source src="gauss_inter/balcony1_melting.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 16:
-						</strong>
-						Melting snow.
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-
-
-		<div class="l-page videotop" style="display: flex">
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="time_splatting/waterfall_inter.mp4" type="video/mp4" />
-					<!-- <source src="gauss_inter/waterfall.mp4" type="video/mp4"/> -->
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 17:
-						</strong>
-						Interpolation through seasons.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="time_splatting/gates.mp4" type="video/mp4" />
-					<!-- <source src="gauss_inter/gates.mp4" type="video/mp4"/> -->
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 18:
-						</strong>
-						Interpolation through seasons.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="gauss_inter/balcony1_shadows_cropped.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 19:
-						</strong>
-						Mini-timelapse: Interpolation through time of day while keeping the date fixed.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="gauss_inter/sunnyhoy_shadow.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 20:
-						</strong>
-						Interpolation through time of day.
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-
-
-		<div class="l-page videobottom" style="display: flex">
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="gauss_inter/hoyfield.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 21:
-						</strong>
-						Interpolation through seasons.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="gauss_inter/construction_dt.mp4" type="video/mp4" />
-					<!-- seems better than the pano version -->
-					<!-- <source src="gauss_inter/construction_pano.mp4" type="video/mp4"/> -->
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 22:
-						</strong>
-						Interpolation through construction.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="gauss_inter/petals.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 23:
-						</strong>
-						Interpolation as tree petals bloom.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="gauss_inter/construction_gates_new.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 24:
-						</strong>
-						Interpolation through construction.
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="n-article">
-		<h2>
-			<center>Time Splatting and Linear Interpolation on a Traditional Time-Lapse</center>
-		</h2>
-		<p>
-			We compare Time Splatting and linear interpolation results on a traditional time-lapse. The sequence is
-			taken from scene 10917 of the SkyFinder dataset [Mihail et al., 2016].
-
-			Because the traditional time lapse is sampled densely from a static camera, linear interpolation does a good
-			job at reconstructing detail. However, unlike Time Splatting, it cannot disentangle lighting changes from
-			seasonal changes. We demonstrate how Time Splatting is able to generate a sequence through seasons while
-			maintaining constant lighting below.
-		</p>
-		<div class="l-page videobottom" style="display: flex">
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="time_splatting/time_splatting_town.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 25:
-						</strong>
-						Time Splatting of a traditional time lapse with constant lighting.
-					</div>
-				</div>
-			</div>
-			<div style="width: 0.98%; margin: 0px; padding: 0px">
-			</div>
-			<div style="width: 49.5%; margin: 0px; padding: 0px">
-				<video loop muted controls="" width="100%">
-					<source src="gauss_inter/town_interpolation_1.mp4" type="video/mp4" />
-				</video>
-				<div class="videocaption">
-					<div>
-						<strong>
-							Video 26:
-						</strong>
-						Linear interpolation of a traditional time lapse cannot disentagle lighting from seasonal
-						changes.
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-	<div class="n-article">
-		<h2>
-			<center>
-				Registration Comparison
-			</center>
-		</h2 <div class="l-article video">
-
-		<div>
-			<video loop muted controls="" width="100%">
-				<source src="registration/RegistrationComparisonHoyConstructionRoof_compressed.mp4" type="video/mp4" />
-			</video>
-		</div>
-
-		</img>
-		<div class="videocaption">
-			<div>
-				<strong>
-					Video 27:
-				</strong>
-				We perform a comparison between our alignment graph registration strategy and two baselines. All-to-one
-				registration matches all captured sessions to one central node, and sequential registration registers
-				each session to its immediate neighbors in time. All-to-one registration fails, due to its inability
-				to account for dramatic changes in geometry during the captured construction. Sequential registration
-				exhibits drift in registration accuracy, which wrongly causes the scene to be rotated 90 degrees. Our
-				method on the other hand is able to register more captures successfully, with only two sessions
-				returning no registration.
-			</div>
-		</div>
-	</div>
-
-
-
-	<p>
-		<center>This templated was inspired by the authors of TLGAN.</center>
-	</p>
-
-	<div class="n-footer">
-		<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;
-	</div>
 </body>
 
 </html>
