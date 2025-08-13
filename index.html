@@ -32,21 +32,121 @@
     <script src="./static/js/index.js"></script>
 
     <style>
+        /* Dark mode styles */
+        html {
+            background-color: #000000;
+        }
+        
+        body {
+            background-color: #000000;
+            color: #e0e0e0;
+        }
+
+        .navbar {
+            background-color: #1a1a1a !important;
+        }
+
+        .navbar-item {
+            color: #e0e0e0 !important;
+        }
+
+        .navbar-item:hover {
+            background-color: #2a2a2a !important;
+            color: #ffffff !important;
+        }
+
+        .hero, .section {
+            background-color: #000000;
+        }
+
+        .title {
+            color: #e0e0e0 !important;
+        }
+
+        .subtitle {
+            color: #a0a0a0 !important;
+        }
+
+        .content {
+            color: #d0d0d0;
+        }
+
+        .content h2, .content h3 {
+            color: #e0e0e0 !important;
+        }
+
+        .content p {
+            color: #d0d0d0;
+        }
+
+        /* Update author links */
+        .publication-authors a {
+            color: #64b5f6 !important;
+        }
+
+        .publication-authors a:hover {
+            color: #90caf9 !important;
+        }
+
+        .publication-authors span:not(.author-block) {
+            color: #b0b0b0;
+        }
+
+        /* Update buttons */
+        .button.is-dark {
+            background-color: #2a2a2a !important;
+            border: 2px solid #4a9eff !important;
+            color: #ffffff !important;
+            transition: all 0.3s ease;
+        }
+
+        .button.is-dark:hover {
+            background-color: #3a3a3a !important;
+            border-color: #6bb3ff !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 10px rgba(74, 158, 255, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #0a0a0a !important;
+            color: #b0b0b0;
+        }
+
+        .footer a {
+            color: #64b5f6 !important;
+        }
+
+        .footer a:hover {
+            color: #90caf9 !important;
+        }
+
         .videocaption {
             margin-top: 8px;
             font-size: 0.9rem;
-            color: #363636;
-            /* Bulma's default text color */
+            color: #b0b0b0;
         }
 
         .videobottom {
             margin-top: 1.5rem;
-            /* Add space between rows of videos */
         }
 
         .hero.teaser video {
-            /* Ensure teaser video takes full width */
             width: 100%;
+        }
+
+        /* Update video captions */
+        .videocaption strong {
+            color: #ffffff;
+        }
+
+        /* Ensure text readability */
+        .has-text-justified {
+            color: #d0d0d0;
+        }
+
+        .has-text-centered {
+            color: #d0d0d0;
         }
     </style>
 
@@ -54,23 +154,6 @@
 
 <body>
 
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
-        <div class="navbar-menu">
-            <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-                <a class="navbar-item" href="#"> <span class="icon">
-                        <i class="fas fa-home"></i>
-                    </span>
-                </a>
-            </div>
-        </div>
-    </nav>
 
     <section class="hero">
         <div class="hero-body">
@@ -105,28 +188,29 @@
                                     </a>
                                 </span>
                                 <span class="link-block">
-                                    <a href="#" class="external-link button is-normal is-rounded is-dark"> <span
-                                            class="icon"><i class="ai ai-arxiv"></i></span>
-                                        <span>arXiv</span>
+                                    <a href="https://github.com/pocket-timelapse/pocket-timelapse" class="external-link button is-normal is-rounded is-dark"> <span
+                                            class="icon"><i class="fab fa-github"></i></span>
+                                        <span>Code (TimeSplatting)</span>
+                                    </a>
+                                </span>
+                                <span class="link-block">
+                                    <a href="https://github.com/abedavis/pocket-time-lapse-registration" class="external-link button is-normal is-rounded is-dark"> <span
+                                            class="icon"><i class="fab fa-github"></i></span>
+                                        <span>Code (Registration)</span>
                                     </a>
                                 </span>
                                 <span class="link-block">
                                     <a href="#" class="external-link button is-normal is-rounded is-dark"> <span
                                             class="icon"><i class="fab fa-youtube"></i></span>
-                                        <span>Video</span>
-                                    </a>
-                                </span>
-                                <span class="link-block">
-                                    <a href="https://github.com/pocket-timelapse/pocket-timelapse" class="external-link button is-normal is-rounded is-dark"> <span
-                                            class="icon"><i class="fab fa-github"></i></span>
-                                        <span>Code</span>
+                                        <span>Video (Coming Soon)</span>
                                     </a>
                                 </span>
                                 <span class="link-block">
                                     <a href="#" class="external-link button is-normal is-rounded is-dark"> <span
                                             class="icon"><i class="far fa-images"></i></span>
-                                        <span>Data</span>
+                                        <span>Data (Coming Soon)</span>
                                     </a>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -141,8 +225,8 @@
                 <video id="teaser" autoplay muted loop playsinline width="100%">
                     <source src="time_splatting/balcony1.mp4" type="video/mp4">
                 </video>
-                <h2 class="subtitle has-text-centered">
-                    Reconstructing scenes across time, seasons, and conditions using <strong>Time Splatting</strong>.
+                <h2 class="subtitle has-text-centered" style="margin-top: 1.5rem;">
+                    Reconstructing scenes across time, seasons, and conditions using <strong style="color: #4a9eff;">Time Splatting</strong>.
                 </h2>
             </div>
         </div>
